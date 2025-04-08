@@ -61,9 +61,8 @@ internal class WebSocketManager {
                     }
 
                     try {
-                        while (true){
-                            val othersMessage = incoming.receive() as? Frame.Text
-                            val text = othersMessage?.readText()
+                        for(message in incoming){
+                            val text = (message as? Frame.Text)?.readText()
 
                             val finalMessage = if (matchHexPattern(text.orEmpty())) {
                                 SPECIAL_MESSAGE

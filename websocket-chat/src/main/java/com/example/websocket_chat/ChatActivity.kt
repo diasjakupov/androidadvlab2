@@ -9,7 +9,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
-import java.util.concurrent.atomic.AtomicLong
 
 /**
  * Activity that provides the chat UI and functionality
@@ -20,7 +19,6 @@ class ChatActivity : AppCompatActivity(), WebSocketManager.MessageListener {
 
     private val chatAdapter = ChatAdapter()
     private val webSocketManager = WebSocketManager()
-    private val messageIdGenerator = AtomicLong(0)
     private val activityScope = CoroutineScope(Dispatchers.Main + SupervisorJob())
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,9 +45,13 @@ class ChatActivity : AppCompatActivity(), WebSocketManager.MessageListener {
         }
     }
 
+    /**
+     * Generates a random long number for message IDs.
+     */
+    private fun generateMessageId(): Long = kotlin.random.Random.nextLong()
 
     private fun sendMessage(message: String) {
-        val messageId = messageIdGenerator.incrementAndGet()
+        val messageId = generateMessageId()
         val userMessageItem = MessageItem(messageId, message, true)
         chatAdapter.addMessage(userMessageItem)
         scrollToBottom()
@@ -60,7 +62,7 @@ class ChatActivity : AppCompatActivity(), WebSocketManager.MessageListener {
      * Callback for received messages from WebSocket
      */
     override fun onMessageReceived(message: String) {
-        val messageId = messageIdGenerator.incrementAndGet()
+        val messageId = generateMessageId()
         val serverMessageItem = MessageItem(messageId, message, false)
         chatAdapter.addMessage(serverMessageItem)
         scrollToBottom()
@@ -70,11 +72,12 @@ class ChatActivity : AppCompatActivity(), WebSocketManager.MessageListener {
      * Callback for WebSocket connection status changes
      */
     override fun onConnectionStatusChanged(connected: Boolean) {
-        if (connected) {
-            Toast.makeText(this, "Connected to chat server", Toast.LENGTH_SHORT).show()
+        val toastMessage = if (connected) {
+            "Connected to chat server"
         } else {
-            Toast.makeText(this, "Disconnected from chat server", Toast.LENGTH_SHORT).show()
+            "Disconnected from chat server"
         }
+        Toast.makeText(this, toastMessage, Toast.LENGTH_SHORT).show()
     }
 
     /**

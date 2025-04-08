@@ -6,6 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.websocket_chat.databinding.ItemMessageBinding
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 /**
  * Adapter for the chat RecyclerView using View Binding
@@ -47,13 +50,29 @@ internal class ChatAdapter : RecyclerView.Adapter<ChatAdapter.MessageViewHolder>
         fun bind(messageItem: MessageItem) {
             if (messageItem.isFromUser) {
                 binding.textViewUserMessage.visibility = View.VISIBLE
-                binding.textViewServerMessage.visibility = View.GONE
                 binding.textViewUserMessage.text = messageItem.message
+                binding.textViewServerMessage.visibility = View.GONE
+
+                binding.textViewUserTimestamp.visibility = View.VISIBLE
+                binding.textViewUserTimestamp.text = formatTimestamp(messageItem.timestamp)
+                binding.textViewServerTimestamp.visibility = View.GONE
             } else {
-                binding.textViewUserMessage.visibility = View.GONE
                 binding.textViewServerMessage.visibility = View.VISIBLE
                 binding.textViewServerMessage.text = messageItem.message
+                binding.textViewUserMessage.visibility = View.GONE
+
+                binding.textViewServerTimestamp.visibility = View.VISIBLE
+                binding.textViewServerTimestamp.text = formatTimestamp(messageItem.timestamp)
+                binding.textViewUserTimestamp.visibility = View.GONE
             }
+        }
+
+        /**
+         * Formats the timestamp (milliseconds) into a readable time string.
+         */
+        private fun formatTimestamp(timestamp: Long): String {
+            val sdf = SimpleDateFormat("h:mm a", Locale.getDefault())
+            return sdf.format(Date(timestamp))
         }
     }
 }
