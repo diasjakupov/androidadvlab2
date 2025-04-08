@@ -1,14 +1,10 @@
 package com.example.androidadvlab2
 
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
-import androidx.navigation.findNavController
-import androidx.navigation.ui.navigateUp
 import com.example.androidadvlab2.databinding.ActivityMainBinding
-import com.example.websocket_chat.ChatBuilder
-import com.google.android.material.snackbar.Snackbar
+import kz.diasjakupov.websocket_chat.ChatBuilder
+import kz.diasjakupov.websocket_chat.databinding.ChatActivityBinding
 
 class MainActivity : AppCompatActivity() {
 

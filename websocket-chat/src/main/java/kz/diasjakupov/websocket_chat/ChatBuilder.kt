@@ -1,4 +1,4 @@
-package com.example.websocket_chat
+package kz.diasjakupov.websocket_chat
 
 import android.content.Context
 import android.content.Intent

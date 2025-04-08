@@ -1,6 +1,6 @@
-package com.example.websocket_chat
+package kz.diasjakupov.websocket_chat
 
-data class MessageItem(
+internal data class MessageItem(
     val id: Long,
     val message: String,
     val isFromUser: Boolean,

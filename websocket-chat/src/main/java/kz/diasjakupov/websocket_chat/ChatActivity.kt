@@ -1,19 +1,19 @@
-package com.example.websocket_chat
+package kz.diasjakupov.websocket_chat
 
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.websocket_chat.databinding.ChatActivityBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
+import kz.diasjakupov.websocket_chat.databinding.ChatActivityBinding
 
 /**
  * Activity that provides the chat UI and functionality
  */
-class ChatActivity : AppCompatActivity(), WebSocketManager.MessageListener {
+internal class ChatActivity : AppCompatActivity(), WebSocketManager.MessageListener {
 
     private lateinit var binding: ChatActivityBinding
 

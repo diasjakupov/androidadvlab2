@@ -1,11 +1,11 @@
-package com.example.websocket_chat
+package kz.diasjakupov.websocket_chat
 
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.websocket_chat.databinding.ItemMessageBinding
+import kz.diasjakupov.websocket_chat.databinding.ItemMessageBinding
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale

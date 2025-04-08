@@ -1,13 +1,22 @@
-package com.example.websocket_chat
+package kz.diasjakupov.websocket_chat
 
-import io.ktor.http.URLProtocol
 import android.util.Log
-import io.ktor.client.*
-import io.ktor.client.engine.cio.*
-import io.ktor.client.plugins.logging.*
-import io.ktor.client.plugins.websocket.*
-import io.ktor.websocket.*
-import kotlinx.coroutines.*
+import io.ktor.client.HttpClient
+import io.ktor.client.engine.cio.CIO
+import io.ktor.client.plugins.logging.LogLevel
+import io.ktor.client.plugins.logging.Logging
+import io.ktor.client.plugins.websocket.DefaultClientWebSocketSession
+import io.ktor.client.plugins.websocket.WebSockets
+import io.ktor.client.plugins.websocket.wss
+import io.ktor.websocket.Frame
+import io.ktor.websocket.close
+import io.ktor.websocket.readText
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 /**
  * Manager class for handling WebSocket connections using Ktor
@@ -52,7 +61,7 @@ internal class WebSocketManager {
     fun connect() {
         coroutineScope.launch {
             try {
-                client.wss(WEBSOCKET_URL){
+                client.wss(WEBSOCKET_URL) {
                     webSocketSession = this
                     isConnected = true
 
@@ -61,7 +70,7 @@ internal class WebSocketManager {
                     }
 
                     try {
-                        for(message in incoming){
+                        for (message in incoming) {
                             val text = (message as? Frame.Text)?.readText()
 
                             val finalMessage = if (matchHexPattern(text.orEmpty())) {

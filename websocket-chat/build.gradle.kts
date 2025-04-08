@@ -1,10 +1,27 @@
+import java.util.Properties
+import kotlin.apply
+
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.maven.publish)
 }
 
+// Place the version of your library here
+val versionName: String = "1.0.4"
+
+// Add the name of your library here
+val libArtifactId: String = "websocket-echo-chat"
+
+// Add the group ID of your library here
+val libGroupId: String = "kz.diasjakupov"
+
+// Prepare URL of maven package.
+val gitHubUrl: String = "https://maven.pkg.github.com/diasjakupov/websocket-echo-chat"
+
+
 android {
-    namespace = "com.example.websocket_chat"
+    namespace = "kz.diasjakupov.websocket_chat"
     compileSdk = 35
 
     defaultConfig {
@@ -36,14 +53,41 @@ android {
     }
 }
 
+val localProps = Properties().apply {
+    load(project.rootProject.file("local.properties").inputStream())
+}
+
+private fun getLocalProperty(key: String) = localProps.getProperty(key)
+
+publishing {
+    publications {
+        register<MavenPublication>("release")  {
+            groupId = libGroupId
+            artifactId = libArtifactId
+            version = versionName
+            afterEvaluate {
+                from(components["release"])
+            }
+        }
+    }
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = uri(gitHubUrl)
+            credentials {
+                username = getLocalProperty("USERNAME")
+                password = getLocalProperty("TOKEN")
+            }
+        }
+    }
+}
+
+
 dependencies {
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
 
     implementation(libs.ktor.client.core)
     implementation(libs.ktor.client.cio)
